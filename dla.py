@@ -14,26 +14,25 @@ def get_direction(r_number):
 def do_step(point, step):
     return [point[0] + step[0], point[1] + step[1]]
 
-def is_equal_points(first, second):
-    return first[0]==second[0] and first[1]==second[1]
+def do_diffuse(start_point, perif_vals):
+    random_numbers = np.random.uniform(0, 1, 1000000)
+    path = [start_point]
+    n_steps = 0
+    for r in random_numbers:
+        step = get_direction(r)
+        current = path[-1]
+        next_point = do_step(current, step)
+        if next_point in perif_vals:
+            print("FOUND", n_steps)
+            break
+        path.append(next_point)
+        n_steps = n_steps + 1
 
-start_point = [10, 10]
-
+    x, y = zip(*path)
+    pl.plot(x, y)
+    pl.show()
+    
+start_point_in = [10, 10]
 grid_point = [0, 0]
-
-random_numbers = np.random.uniform(0, 1, 1000000)
-path = [start_point]
-n_steps = 0
-for r in random_numbers:
-    step = get_direction(r)
-    current = path[-1]
-    next_point = do_step(current, step)
-    if is_equal_points(grid_point, next_point):
-        print("FOUND", n_steps)
-        break
-    path.append(next_point)
-    n_steps = n_steps + 1
-
-x, y = zip(*path)
-pl.plot(x, y)
-pl.show()
+perif_vals_in = [grid_point]
+do_diffuse(start_point_in, perif_vals_in)
